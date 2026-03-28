@@ -1,6 +1,17 @@
 import { useMemo, useState } from 'react'
+import {
+  CalendarDays,
+  Pencil,
+  Plus,
+  Search,
+  SlidersHorizontal,
+  Tags,
+  Trash2,
+  WalletCards,
+} from 'lucide-react'
 import categories from '../data/Category.js'
 import useExpense from '../hooks/useExpense.js'
+import { getCategoryIcon } from '../data/categoryIcons.jsx'
 
 const formatCurrency = (value) => {
   const formatted = new Intl.NumberFormat('ne-NP', {
@@ -90,7 +101,8 @@ function ExpensePage() {
     <div className="space-y-8">
       <section className="grid gap-6">
         <article className="rounded-3xl bg-white p-6 shadow-xl ring-1 ring-stone-200/60">
-          <h2 className="text-xl font-semibold text-stone-900">
+          <h2 className="flex items-center gap-2 text-xl font-semibold text-stone-900">
+            <WalletCards size={20} className="text-stone-500" />
             {editingId ? 'Edit Entry' : 'Add Entry'}
           </h2>
           <form className="mt-4 space-y-4" onSubmit={onSubmit}>
@@ -201,8 +213,9 @@ function ExpensePage() {
             <div className="flex flex-wrap gap-3">
               <button
                 type="submit"
-                className="rounded-full bg-stone-900 px-5 py-2 text-sm font-semibold text-white transition hover:bg-stone-800"
+                className="inline-flex items-center gap-2 rounded-full bg-stone-900 px-5 py-2 text-sm font-semibold text-white transition hover:bg-stone-800"
               >
+                {editingId ? <Pencil size={16} /> : <Plus size={16} />}
                 {editingId ? 'Save Changes' : 'Add Entry'}
               </button>
               {editingId ? (
@@ -222,24 +235,33 @@ function ExpensePage() {
       <section className="rounded-3xl bg-white p-6 shadow-xl ring-1 ring-stone-200/60">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div>
-            <h2 className="text-xl font-semibold text-stone-900">Activity</h2>
+            <h2 className="flex items-center gap-2 text-xl font-semibold text-stone-900">
+              <SlidersHorizontal size={20} className="text-stone-500" />
+              Activity
+            </h2>
             <p className="text-sm text-stone-500">
               {filtered.length} entries shown out of {expenses.length}
             </p>
           </div>
           <div className="flex flex-wrap gap-3">
-            <input
-              className="w-48 rounded-xl border border-stone-200 bg-white px-4 py-2 text-sm focus:border-stone-400 focus:outline-none"
-              type="search"
-              placeholder="Search title or note"
-              value={filters.search}
-              onChange={(event) =>
-                setFilters((prev) => ({
-                  ...prev,
-                  search: event.target.value,
-                }))
-              }
-            />
+            <label className="relative">
+              <Search
+                size={16}
+                className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-stone-400"
+              />
+              <input
+                className="w-48 rounded-xl border border-stone-200 bg-white py-2 pl-10 pr-4 text-sm focus:border-stone-400 focus:outline-none"
+                type="search"
+                placeholder="Search title or note"
+                value={filters.search}
+                onChange={(event) =>
+                  setFilters((prev) => ({
+                    ...prev,
+                    search: event.target.value,
+                  }))
+                }
+              />
+            </label>
             <select
               className="rounded-xl border border-stone-200 bg-white px-4 py-2 text-sm focus:border-stone-400 focus:outline-none"
               value={filters.category}
@@ -293,16 +315,28 @@ function ExpensePage() {
                 key={item.id}
                 className="grid gap-3 rounded-2xl bg-stone-50 px-4 py-4 text-sm sm:grid-cols-[2fr_1fr_1fr_1fr_auto] sm:items-center"
               >
-                <div>
-                  <p className="font-medium text-stone-700">{item.title}</p>
-                  {item.note ? (
-                    <p className="text-xs text-stone-500">{item.note}</p>
-                  ) : null}
+                <div className="flex items-center gap-3">
+                  <span className="grid h-10 w-10 place-items-center rounded-2xl bg-white text-stone-600 shadow-sm ring-1 ring-stone-200">
+                    {(() => {
+                      const CategoryIcon = getCategoryIcon(item.category)
+                      return <CategoryIcon size={18} />
+                    })()}
+                  </span>
+                  <div>
+                    <p className="font-medium text-stone-700">{item.title}</p>
+                    {item.note ? (
+                      <p className="text-xs text-stone-500">{item.note}</p>
+                    ) : null}
+                  </div>
                 </div>
-                <span className="text-stone-600">
+                <span className="inline-flex items-center gap-2 text-stone-600">
+                  <Tags size={15} className="text-stone-400" />
                   {categories.find((cat) => cat.value === item.category)?.label}
                 </span>
-                <span className="text-stone-600">{item.date}</span>
+                <span className="inline-flex items-center gap-2 text-stone-600">
+                  <CalendarDays size={15} className="text-stone-400" />
+                  {item.date}
+                </span>
                 <span
                   className={`font-semibold ${
                     item.type === 'income'
@@ -310,20 +344,21 @@ function ExpensePage() {
                       : 'text-rose-600'
                   }`}
                 >
-                  {item.type === 'income' ? '+' : '-'}
                   {formatCurrency(item.amount)}
                 </span>
                 <div className="flex flex-wrap gap-2">
                   <button
-                    className="rounded-full border border-stone-300 px-3 py-1 text-xs font-semibold text-stone-600 hover:bg-stone-100"
+                    className="inline-flex items-center gap-1 rounded-full border border-stone-300 px-3 py-1 text-xs font-semibold text-stone-600 hover:bg-stone-100"
                     onClick={() => onEdit(item)}
                   >
+                    <Pencil size={14} />
                     Edit
                   </button>
                   <button
-                    className="rounded-full border border-rose-200 bg-rose-50 px-3 py-1 text-xs font-semibold text-rose-600 hover:bg-rose-100"
+                    className="inline-flex items-center gap-1 rounded-full border border-rose-200 bg-rose-50 px-3 py-1 text-xs font-semibold text-rose-600 hover:bg-rose-100"
                     onClick={() => deleteExpense(item.id)}
                   >
+                    <Trash2 size={14} />
                     Delete
                   </button>
                 </div>

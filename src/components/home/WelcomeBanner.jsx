@@ -1,3 +1,4 @@
+import { Gauge, Target, TrendingUp } from 'lucide-react'
 import useExpense from '../../hooks/useExpense.js'
 
 const formatCurrency = (value) => {
@@ -14,7 +15,8 @@ function WelcomeBanner() {
   return (
     <section className="grid gap-8 rounded-3xl bg-white/70 p-8 shadow-xl ring-1 ring-stone-200/60 md:grid-cols-[1.3fr_1fr]">
       <div className="space-y-4">
-        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-stone-400">
+        <p className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-stone-400">
+          <TrendingUp size={14} />
           Personal Finance Hub
         </p>
         <h1 className="text-3xl font-semibold text-stone-900 sm:text-4xl lg:text-5xl">
@@ -27,13 +29,15 @@ function WelcomeBanner() {
       </div>
       <div className="grid gap-4 rounded-2xl bg-white p-6 shadow-lg">
         <div>
-          <p className="text-xs uppercase tracking-wide text-stone-400">
+          <p className="flex items-center gap-2 text-xs uppercase tracking-wide text-stone-400">
+            <Gauge size={14} />
             This Month
           </p>
           <p className="text-2xl font-semibold text-stone-900">
             {formatCurrency(stats.spending)}
           </p>
-          <p className="text-sm text-stone-500">
+          <p className="mt-1 flex items-center gap-2 text-sm text-stone-500">
+            <Target size={14} />
             Budget: {formatCurrency(monthlyBudget)}
           </p>
         </div>

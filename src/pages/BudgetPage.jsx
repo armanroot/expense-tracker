@@ -1,5 +1,7 @@
+import { LayoutGrid, PiggyBank, Target, Wallet } from 'lucide-react'
 import categories from '../data/Category.js'
 import useSetBudget from '../hooks/setBudget.js'
+import { getCategoryIcon } from '../data/categoryIcons.jsx'
 
 const formatCurrency = (value) => {
   const formatted = new Intl.NumberFormat('ne-NP', {
@@ -21,7 +23,8 @@ function BudgetPage() {
     <div className="space-y-8">
       <section className="rounded-3xl bg-white p-6 shadow-xl ring-1 ring-stone-200/60">
         <div className="space-y-2">
-          <h1 className="text-2xl font-semibold text-stone-900">
+          <h1 className="flex items-center gap-2 text-2xl font-semibold text-stone-900">
+            <PiggyBank size={22} className="text-stone-500" />
             Budget Planning
           </h1>
           <p className="text-sm text-stone-500">
@@ -31,7 +34,8 @@ function BudgetPage() {
         </div>
         <div className="mt-6 grid gap-6 lg:grid-cols-[1fr_1.2fr]">
           <div className="rounded-2xl border border-stone-200 bg-stone-50 p-5">
-            <p className="text-xs uppercase tracking-wide text-stone-400">
+            <p className="flex items-center gap-2 text-xs uppercase tracking-wide text-stone-400">
+              <Wallet size={14} />
               Monthly Budget
             </p>
             <p className="mt-2 text-2xl font-semibold text-stone-900">
@@ -56,7 +60,8 @@ function BudgetPage() {
             </div>
           </div>
           <div className="rounded-2xl border border-stone-200 bg-white p-5">
-            <p className="text-xs uppercase tracking-wide text-stone-400">
+            <p className="flex items-center gap-2 text-xs uppercase tracking-wide text-stone-400">
+              <Target size={14} />
               Current Month Status
             </p>
             <div className="mt-3 grid gap-3 sm:grid-cols-2">
@@ -97,7 +102,8 @@ function BudgetPage() {
       <section className="rounded-3xl bg-white p-6 shadow-xl ring-1 ring-stone-200/60">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div>
-            <h2 className="text-xl font-semibold text-stone-900">
+            <h2 className="flex items-center gap-2 text-xl font-semibold text-stone-900">
+              <LayoutGrid size={20} className="text-stone-500" />
               Category Budgets
             </h2>
             <p className="text-sm text-stone-500">
@@ -110,30 +116,36 @@ function BudgetPage() {
             const spent = stats.byCategory[category.value] || 0
             const limit = categoryBudgets[category.value] || 0
             const remaining = limit - spent
+            const CategoryIcon = getCategoryIcon(category.value)
 
             return (
               <div
                 key={category.value}
                 className="flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-stone-200 bg-stone-50 px-4 py-4"
               >
-                <div>
-                  <p className="text-sm font-medium text-stone-700">
-                    {category.label}
-                  </p>
-                  <p className="text-xs text-stone-500">
-                    Spent: {formatCurrency(spent)}
-                  </p>
-                  <p
-                    className={`text-xs font-semibold ${
-                      limit > 0 && remaining < 0
-                        ? 'text-rose-600'
-                        : 'text-emerald-600'
-                    }`}
-                  >
-                    {limit > 0
-                      ? `Remaining: ${formatCurrency(remaining)}`
-                      : 'No limit set'}
-                  </p>
+                <div className="flex items-center gap-3">
+                  <span className="grid h-10 w-10 place-items-center rounded-2xl bg-white text-stone-600 shadow-sm ring-1 ring-stone-200">
+                    <CategoryIcon size={18} />
+                  </span>
+                  <div>
+                    <p className="text-sm font-medium text-stone-700">
+                      {category.label}
+                    </p>
+                    <p className="text-xs text-stone-500">
+                      Spent: {formatCurrency(spent)}
+                    </p>
+                    <p
+                      className={`text-xs font-semibold ${
+                        limit > 0 && remaining < 0
+                          ? 'text-rose-600'
+                          : 'text-emerald-600'
+                      }`}
+                    >
+                      {limit > 0
+                        ? `Remaining: ${formatCurrency(remaining)}`
+                        : 'No limit set'}
+                    </p>
+                  </div>
                 </div>
                 <input
                   className="w-32 rounded-xl border border-stone-200 bg-white px-3 py-2 text-sm focus:border-stone-400 focus:outline-none"
