@@ -8,7 +8,7 @@ function Footer() {
         Expense Tracker • Focused on clarity, powered by you.
       </p>
       <a
-        href="https://github.com/Arman-techiee/expense-tracker.git"
+        href="https://github.com/armanroot/expense-tracker.git"
         target="_blank"
         rel="noreferrer"
         className="mt-2 inline-flex items-center gap-2 text-stone-600 underline decoration-stone-300 underline-offset-4 transition hover:text-stone-900"
@@ -21,3 +21,4 @@ function Footer() {
 }
 
 export default Footer
+
